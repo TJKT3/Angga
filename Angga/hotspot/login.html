@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="-1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selamat Datang di Hotspot Angga</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(to bottom, #00c6ff, #0072ff);
+            color: #fff;
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .wrap {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            width: 320px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #e0f7ff;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+        }
+
+        input[type="submit"] {
+            padding: 10px;
+            margin-top: 15px;
+            background-color: #00f0ff;
+            color: #0072ff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #00d0ff;
+        }
+
+        .info {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .ico {
+            width: 20px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="wrap">
+            <h1>Selamat Datang di Hotspot Angga</h1>
+
+            <!-- CHAP hidden form (required for MikroTik) -->
+            $(if chap-id)
+            <form name="sendin" action="$(link-login-only)" method="post" style="display:none">
+                <input type="hidden" name="username" />
+                <input type="hidden" name="password" />
+                <input type="hidden" name="dst" value="$(link-orig)" />
+                <input type="hidden" name="popup" value="true" />
+            </form>
+
+            <script src="/md5.js"></script>
+            <script>
+                function doLogin() {
+                    document.sendin.username.value = document.login.username.value;
+                    document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+                    document.sendin.submit();
+                    return false;
+                }
+            </script>
+            $(endif)
+
+            <!-- Visible login form -->
+            <form name="login" action="$(link-login-only)" method="post" $(if chap-id) onsubmit="return doLogin()" $(endif)>
+                <input type="hidden" name="dst" value="$(link-orig)" />
+                <input type="hidden" name="popup" value="true" />
+
+                <label>
+                    <img class="ico" src="img/user.svg" alt="User" />
+                    <input name="username" type="text" placeholder="Username" />
+                </label>
+
+                <label>
+                    <img class="ico" src="img/password.svg" alt="Password" />
+                    <input name="password" type="password" placeholder="Password" />
+                </label>
+
+                <input type="submit" value="Connect" />
+            </form>
+
+            <p class="info">Powered by MikroTik RouterOS</p>
+        </div>
+    </div>
+</body>
+
+</html>
