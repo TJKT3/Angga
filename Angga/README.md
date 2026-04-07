@@ -1,2 +1,0 @@
-# Deiza
-Punya Deiza
